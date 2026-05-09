@@ -1,0 +1,43 @@
+/* ===========================
+   Zosyo カスタムスタイル
+=========================== */
+
+/* ヘッダー */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+}
+
+/* カード */
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* テーブル */
+.table th {
+    background-color: #f8f9fa;
+    white-space: nowrap;
+}
+
+/* 在庫数バッジ */
+.badge-stock-ok {
+    background-color: #198754;
+    color: white;
+}
+
+.badge-stock-ng {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* ボタン間隔 */
+.btn + .btn {
+    margin-left: 0.3rem;
+}
+
+/* フラッシュメッセージ */
+.alert {
+    border-radius: 0.5rem;
+}
