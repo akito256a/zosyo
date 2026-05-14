@@ -58,4 +58,4 @@ src/main/resources/application.properties を編集
 - 貸出・返却機能
 - Spring Security によるログイン機能
 - CSVエクスポート機能
-- ページネーション
+- GitHubとRailwayを連携させ、サーバレス構成に改修。
