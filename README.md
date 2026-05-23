@@ -1,61 +1,168 @@
 # 📚 Zosyo（蔵書）- 社内蔵書管理システム
 
-## 概要
-社員教育のために会社が購入した書籍の在庫数・貸出状況を管理するWebアプリケーションです。
-前職の総務・経理業務での課題をシステム化しました。
+[![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=flat-square&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Railway](https://img.shields.io/badge/Deploy-Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)](https://railway.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
-## 使用技術
+> 前職の業務課題をシステム化した、Spring Boot + PostgreSQL による社内蔵書管理Webアプリケーション。  
+> Railway にデプロイ済みで、今すぐ動作確認できます。
+
+🔗 **デモURL：** [https://zosyo-production.up.railway.app/books](https://zosyo-production.up.railway.app/books)
+
+---
+
+## 🎯 制作の背景・動機
+
+前職（事務職）では、会社が購入した技術書・ビジネス書の管理をExcelで行っていました。  
+在庫数の更新漏れ・書籍の所在不明・貸出記録の散逸といった問題が日常的に発生しており、  
+「これはシステム化すべき業務だ」と感じた実体験がこのプロジェクトの出発点です。
+
+Javaを学び始めたタイミングで、**学習の成果を実務課題の解決に繋げる**ことを目標に開発しました。
+
+---
+
+## 🖥️ デモ画面
+
+> ※ スクリーンショットは準備中です。デモURLから実際に操作できます。  
+> [https://zosyo-production.up.railway.app/books](https://zosyo-production.up.railway.app/books)
+
+---
+
+## 🛠️ 使用技術
+
 | 分類 | 技術 |
-|---|---|
-| バックエンド | Java 21 / Spring Boot 4.0.6 / Spring Data JPA |
+|------|------|
+| バックエンド | Java 21 / Spring Boot 4.0.6 / Spring MVC / Spring Data JPA |
 | フロントエンド | Thymeleaf / HTML / CSS / Bootstrap 5 |
 | データベース | PostgreSQL 16 |
+| インフラ | Railway（Serverless構成） |
 | バージョン管理 | Git / GitHub |
 | ビルドツール | Maven |
+| コンテナ | Docker |
 
-## システム構成
+---
+
+## 🏗️ システム構成
+
 ```
-PC1（開発機）   : Windows 11 / VSCode
-PC2（APサーバー）: Ubuntu Server 24.04 / Spring Boot
-PC3（DBサーバー）: Ubuntu Server 24.04 / PostgreSQL 16
+[ユーザーのブラウザ]
+       │ HTTPS
+       ▼
+[Railway - Spring Boot アプリ]  ←── GitHub push で自動デプロイ
+       │ JDBC
+       ▼
+[Railway - PostgreSQL 16]
 ```
 
-## 機能一覧
-- 蔵書一覧表示
-- 蔵書登録
-- 蔵書編集
-- 蔵書削除
-- タイトル・カテゴリでの検索
-- 在庫数の管理（在庫あり：緑 / 在庫なし：赤）
+- **デプロイ方式：** GitHub連携による自動デプロイ（push → ビルド → リリース）
+- **スケーリング：** Serverless設定（アイドル時はリソースを解放）
+- **環境変数：** DB接続情報はRailway環境変数で管理（コードにハードコードなし）
 
-## ER図
+---
+
+## ✅ 機能一覧
+
+| 機能 | 説明 |
+|------|------|
+| 蔵書一覧表示 | 登録された全書籍の一覧表示 |
+| 蔵書登録 | タイトル・著者・カテゴリ・冊数などの新規登録 |
+| 蔵書編集 | 既存書籍情報の更新 |
+| 蔵書削除 | 書籍レコードの削除 |
+| 検索 | タイトル・カテゴリによる絞り込み検索 |
+| 在庫表示 | 在庫あり（🟢緑）/ 在庫なし（🔴赤）で視覚的に表示 |
+
+---
+
+## 🗄️ ER図
+
 ```
 books
-  ├── id          BIGSERIAL PRIMARY KEY
-  ├── title       VARCHAR(200) NOT NULL
-  ├── author      VARCHAR(100)
-  ├── category    VARCHAR(50)
-  ├── quantity    INT NOT NULL DEFAULT 1
-  ├── stock       INT NOT NULL DEFAULT 1
-  ├── note        VARCHAR(255)
-  ├── created_at  TIMESTAMP
-  └── updated_at  TIMESTAMP
+  ├── id          BIGSERIAL     PRIMARY KEY
+  ├── title       VARCHAR(200)  NOT NULL        （書籍タイトル）
+  ├── author      VARCHAR(100)                  （著者名）
+  ├── category    VARCHAR(50)                   （カテゴリ）
+  ├── quantity    INT           NOT NULL DEFAULT 1  （総冊数）
+  ├── stock       INT           NOT NULL DEFAULT 1  （在庫数）
+  ├── note        VARCHAR(255)                  （備考）
+  ├── created_at  TIMESTAMP                     （登録日時）
+  └── updated_at  TIMESTAMP                     （更新日時）
 ```
 
-## 起動方法
+---
+
+## 🚀 ローカル起動手順
+
+### 前提条件
+
+- Java 21 以上
+- Maven 3.9 以上
+- PostgreSQL 16 以上
+
+### 手順
+
 ```bash
-# リポジトリのクローン
+# 1. リポジトリのクローン
 git clone https://github.com/akito256a/zosyo.git
+cd zosyo
 
-# DB接続設定
-src/main/resources/application.properties を編集
+# 2. DBの作成（PostgreSQL）
+createdb zosyo_db
 
-# 起動
+# 3. application.properties の設定
+#    src/main/resources/application.properties を編集
+#    spring.datasource.url / username / password を自環境に合わせる
+
+# 4. 起動
 ./mvnw spring-boot:run
+
+# 5. ブラウザでアクセス
+open http://localhost:8080/books
 ```
 
-## 今後の拡張予定
-- 貸出・返却機能
-- Spring Security によるログイン機能
-- CSVエクスポート機能
-- GitHubとRailwayを連携させ、サーバレス構成に改修。
+---
+
+## 📁 ディレクトリ構成
+
+```
+zosyo/
+├── src/
+│   ├── main/
+│   │   ├── java/com/zosyo/
+│   │   │   ├── controller/   # MVCコントローラー
+│   │   │   ├── model/        # エンティティクラス
+│   │   │   ├── repository/   # Spring Data JPA リポジトリ
+│   │   │   └── service/      # ビジネスロジック
+│   │   └── resources/
+│   │       ├── templates/    # Thymeleafテンプレート
+│   │       └── application.properties
+├── Dockerfile
+├── railway.toml
+└── pom.xml
+```
+
+---
+
+## 🔮 今後の拡張予定
+
+- [ ] 貸出・返却機能（貸出者・返却期限の管理）
+- [ ] Spring Security によるログイン認証
+- [ ] CSVエクスポート機能
+- [ ] REST API化（フロントエンド分離を想定）
+- [ ] React / TypeScript によるフロントエンド刷新
+
+---
+
+## 👤 開発者について
+
+事務職からWebエンジニアへのキャリアチェンジを目指して学習中です。  
+前職での業務経験を活かし、「現場の課題をシステムで解決する」視点を大切にしています。
+
+- GitHub：[@akito256a](https://github.com/akito256a)
+
+---
+
+## 📄 ライセンス
+
+[MIT License](./LICENSE)
