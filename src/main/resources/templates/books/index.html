@@ -121,6 +121,13 @@
                     ></span>
                   </td>
                   <td class="text-center">
+                    <!-- 在庫ありのときだけ貸出ボタンを活性化 -->
+                    <a
+                      th:href="@{/loans/new(bookId=${book.id})}"
+                      class="btn btn-sm btn-outline-success"
+                      th:classappend="${book.stock == 0} ? ' disabled'"
+                      >貸出</a
+                    >
                     <a
                       th:href="@{/books/{id}/edit(id=${book.id})}"
                       class="btn btn-sm btn-outline-primary"
