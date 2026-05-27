@@ -9,9 +9,7 @@
 > 前職の業務課題をシステム化した、Spring Boot + PostgreSQL による社内蔵書管理Webアプリケーション。  
 > Railway にデプロイ済みで、すぐに動作確認できます。
 
-<a href="https://zosyo-production.up.railway.app/books" target="_blank">
-  デモURL：https://zosyo-production.up.railway.app/books
-</a>
+🔗 **デモURL：** [https://zosyo-production.up.railway.app/books](https://zosyo-production.up.railway.app/books)
 
 ---
 
