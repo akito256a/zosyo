@@ -25,17 +25,17 @@ Javaを学び始めたタイミングで、**学習の成果を実務課題の�
 
 ## デモ画面
 
-### 蔵書一覧
+### 一覧
 
 ![蔵書一覧](docs/zosyo_list.png)
 
-### 蔵書登録
+### 登録
 
 ![蔵書登録](docs/zosyo_new.png)
 
-### 検索結果（カテゴリ絞り込み）
+### 貸出
 
-![検索結果](docs/zosyo_dropdown.png)
+![検索結果](docs/zosyo_loan.png)
 
 ---
 
