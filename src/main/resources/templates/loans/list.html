@@ -15,6 +15,11 @@
       <div class="container">
         <a class="navbar-brand" th:href="@{/books}">📚 Zosyo</a>
         <span class="text-white navbar-subtitle">社内蔵書管理システム</span>
+        <form th:action="@{/logout}" method="post" class="d-inline ms-auto">
+          <button type="submit" class="btn btn-outline-light btn-sm">
+            ログアウト
+          </button>
+        </form>
       </div>
     </nav>
 

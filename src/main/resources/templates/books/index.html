@@ -19,6 +19,11 @@
         <a th:href="@{/loans}" class="btn btn-outline-light btn-sm ms-auto">
           貸出一覧
         </a>
+        <form th:action="@{/logout}" method="post" class="d-inline ms-2">
+          <button type="submit" class="btn btn-outline-light btn-sm">
+            ログアウト
+          </button>
+        </form>
       </div>
     </nav>
 
