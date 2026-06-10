@@ -4,6 +4,7 @@
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=flat-square&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Railway](https://img.shields.io/badge/Deploy-Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)](https://railway.app/)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-6-6DB33F?style=flat-square&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
 > 前職の業務課題をシステム化した、Spring Boot + PostgreSQL による社内蔵書管理Webアプリケーション。  
@@ -41,15 +42,15 @@ Javaを学び始めたタイミングで、**学習の成果を実務課題の�
 
 ## 使用技術
 
-| 分類           | 技術                                                       |
-| -------------- | ---------------------------------------------------------- |
-| バックエンド   | Java 21 / Spring Boot 4.0.6 / Spring MVC / Spring Data JPA |
-| フロントエンド | Thymeleaf / HTML / CSS / Bootstrap 5                       |
-| データベース   | PostgreSQL 16                                              |
-| インフラ       | Railway（Serverless構成）                                  |
-| バージョン管理 | Git / GitHub                                               |
-| ビルドツール   | Maven                                                      |
-| コンテナ       | Docker                                                     |
+| 分類           | 技術                                                                           |
+| -------------- | ------------------------------------------------------------------------------ |
+| バックエンド   | Java 21 / Spring Boot 4.0.6 / Spring MVC / Spring Data JPA / Spring Security 6 |
+| フロントエンド | Thymeleaf / HTML / CSS / Bootstrap 5                                           |
+| データベース   | PostgreSQL 16                                                                  |
+| インフラ       | Railway（Serverless構成）                                                      |
+| バージョン管理 | Git / GitHub                                                                   |
+| ビルドツール   | Maven                                                                          |
+| コンテナ       | Docker                                                                         |
 
 ---
 
@@ -73,14 +74,16 @@ Javaを学び始めたタイミングで、**学習の成果を実務課題の�
 
 ## 機能一覧
 
-| 機能         | 説明                                                     |
-| ------------ | -------------------------------------------------------- |
-| 一覧　　 | 登録された全書籍の一覧表示                               |
-| 登録 　　    | タイトル・著者・カテゴリ・冊数などの新規登録             |
-| 編集　　     | 既存書籍情報の更新                                       |
-| 削除　　     | 書籍レコードの削除                                       |
-| 検索         | タイトル・カテゴリによる絞り込み検索                     |
-| 在庫     | 在庫あり（緑色表示）/ 在庫なし（赤色表示）で視覚的に判別 |
+| 機能       | 説明                                                           |
+| ---------- | -------------------------------------------------------------- |
+| 一覧　　   | 登録された全書籍の一覧表示                                     |
+| 登録 　　  | タイトル・著者・カテゴリ・冊数などの新規登録                   |
+| 編集　　   | 既存書籍情報の更新                                             |
+| 削除　　   | 書籍レコードの削除                                             |
+| 検索       | タイトル・カテゴリによる絞り込み検索                           |
+| 在庫       | 在庫あり（緑色表示）/ 在庫なし（赤色表示）で視覚的に判別       |
+| 認証       | Spring Security によるログイン認証（BCryptパスワードハッシュ） |
+| ログアウト | セッション破棄・ログイン画面へのリダイレクト                   |
 
 ---
 
@@ -97,6 +100,16 @@ books
   ├── note        VARCHAR(255)                  （備考）
   ├── created_at  TIMESTAMP                     （登録日時）
   └── updated_at  TIMESTAMP                     （更新日時）
+
+users
+  ├── id          BIGSERIAL     PRIMARY KEY
+  ├── username    VARCHAR(50)   NOT NULL UNIQUE  （ユーザー名）
+  ├── password    VARCHAR(255)  NOT NULL         （BCryptハッシュ）
+  └── enabled     BOOLEAN       NOT NULL DEFAULT TRUE
+
+authorities
+  ├── username    VARCHAR(50)   NOT NULL         （usersへの外部キー）
+  └── authority   VARCHAR(50)   NOT NULL         （例: ROLE_USER）
 ```
 
 ---
@@ -139,6 +152,7 @@ zosyo/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/zosyo/
+│   │   │   ├── config/       # セキュリティ設定（SecurityConfig）
 │   │   │   ├── controller/   # MVCコントローラー
 │   │   │   ├── model/        # エンティティクラス
 │   │   │   ├── repository/   # Spring Data JPA リポジトリ
@@ -155,7 +169,7 @@ zosyo/
 
 ## 今後の拡張予定
 
-- [ ] Spring Security によるログイン認証
+- [x] Spring Security によるログイン認証（BCrypt / JdbcUserDetailsManager）
 - [ ] CSVエクスポート機能
 - [ ] REST API化（フロントエンド分離を想定）
 - [ ] React / TypeScript によるフロントエンド刷新
