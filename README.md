@@ -109,7 +109,7 @@ users
 
 authorities
   ├── username    VARCHAR(50)   NOT NULL         （usersへの外部キー）
-  └── authority   VARCHAR(50)   NOT NULL         （例: ROLE_USER）
+  └── authority   VARCHAR(50)   NOT NULL         （ROLE_USER）
 ```
 
 ---
@@ -169,7 +169,6 @@ zosyo/
 
 ## 今後の拡張予定
 
-- [x] Spring Security によるログイン認証（BCrypt / JdbcUserDetailsManager）
 - [ ] CSVエクスポート機能
 - [ ] REST API化（フロントエンド分離を想定）
 - [ ] React / TypeScript によるフロントエンド刷新
