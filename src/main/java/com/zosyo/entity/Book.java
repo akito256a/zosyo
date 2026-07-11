@@ -13,15 +13,15 @@ public class Book {
     private Long id;
 
     @NotBlank(message = "タイトルは必須です")
-    @Size(max = 200, message = "タイトルは200文字以内で入力してください")
-    @Column(name = "title", nullable = false, length = 200)
+    @Size(max = 20, message = "タイトルは20文字以内で入力してください")
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Size(max = 100, message = "著者名は100文字以内で入力してください")
+    @Size(max = 20, message = "著者名は20文字以内で入力してください")
     @Column(name = "author", length = 100)
     private String author;
 
-    @Size(max = 50, message = "カテゴリは50文字以内で入力してください")
+    @Size(max = 20, message = "カテゴリは20文字以内で入力してください")
     @Column(name = "category", length = 50)
     private String category;
 
@@ -33,8 +33,8 @@ public class Book {
     @Column(name = "stock", nullable = false)
     private int stock = 1;
 
-    @Size(max = 255, message = "備考は255文字以内で入力してください")
-    @Column(name = "note", length = 255)
+    @Size(max = 100, message = "備考は100文字以内で入力してください")
+    @Column(name = "note", length = 100)
     private String note;
 
     @Column(name = "created_at", updatable = false)

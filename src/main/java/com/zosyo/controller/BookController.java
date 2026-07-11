@@ -15,7 +15,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    // コンストラクタインジェクション
+    // コンストラクタインジェクション(DI)
     public BookController(BookService bookService) {
         this.bookService = bookService;
     }

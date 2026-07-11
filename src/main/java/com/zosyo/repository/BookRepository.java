@@ -1,32 +1,30 @@
 package com.zosyo.repository;
 
 import com.zosyo.entity.Book;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    // タイトルで部分一致検索（大文字小文字を区別しない）
     List<Book> findByTitleContainingIgnoreCase(String title);
 
-    // カテゴリで検索
     List<Book> findByCategory(String category);
 
-    // タイトルとカテゴリで複合検索
-//修正前
-    /* @Query("SELECT b FROM Book b WHERE " +
+    @Query("SELECT b FROM Book b WHERE " +
            "(:title IS NULL OR LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
            "(:category IS NULL OR b.category = :category)")
     List<Book> searchBooks(@Param("title") String title,
-                           @Param("category") String category); */
-// 修正後
-@Query("SELECT b FROM Book b WHERE " +
-       "(:title IS NULL OR b.title LIKE %:title%) AND " +
-       "(:category IS NULL OR b.category = :category)")
-List<Book> searchBooks(@Param("title") String title,
-                       @Param("category") String category);
+                           @Param("category") String category);
+
+    // 悲観ロック付き取得：貸出処理の在庫チェック用です
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT b FROM Book b WHERE b.id = :id")
+    Optional<Book> findByIdForUpdate(@Param("id") Long id);
 }

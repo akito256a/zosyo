@@ -18,7 +18,7 @@ public class LoanController {
     private final LoanService loanService;
     private final BookService bookService;
 
-    // コンストラクタインジェクション
+    // コンストラクタインジェクション(DI)
     public LoanController(LoanService loanService, BookService bookService) {
         this.loanService = loanService;
         this.bookService = bookService;
@@ -59,14 +59,13 @@ public class LoanController {
             model.addAttribute("book", bookService.findById(bookId));
             return "loans/form";
         }
-
         try {
             loanService.loanBook(bookId, loan);
             redirectAttributes.addFlashAttribute("successMessage", "貸出を登録しました。");
-        } catch (IllegalStateException e) {
+        } catch (RuntimeException e) {   // ← IllegalStateExceptionから変更
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        }
-        return "redirect:/books";
+    }
+    return "redirect:/books";
     }
 
     // ===========================
@@ -74,10 +73,14 @@ public class LoanController {
     // ===========================
     @PostMapping("/{loanId}/return")
     public String returnBook(
-            @PathVariable Long loanId,
-            RedirectAttributes redirectAttributes) {
+        @PathVariable Long loanId,
+        RedirectAttributes redirectAttributes) {
+    try {
         loanService.returnBook(loanId);
         redirectAttributes.addFlashAttribute("successMessage", "返却が完了しました。");
-        return "redirect:/loans";
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+    }
+    return "redirect:/loans";
     }
 }
