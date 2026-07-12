@@ -18,10 +18,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByCategory(String category);
 
     @Query("SELECT b FROM Book b WHERE " +
-           "(:title IS NULL OR LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
-           "(:category IS NULL OR b.category = :category)")
+            "(:title IS NULL OR LOWER(b.title) LIKE LOWER(CONCAT('%', CAST(:title AS string), '%'))) AND " +
+            "(:category IS NULL OR b.category = :category)")
     List<Book> searchBooks(@Param("title") String title,
-                           @Param("category") String category);
+                            @Param("category") String category);
 
     // 悲観ロック付き取得：貸出処理の在庫チェック用です
     @Lock(LockModeType.PESSIMISTIC_WRITE)
