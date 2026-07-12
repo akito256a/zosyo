@@ -83,47 +83,39 @@
                   <th class="text-center">操作</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr th:each="loan : ${loans}">
-                  <td th:text="${loan.book.title}"></td>
-                  <td th:text="${loan.borrowerName}"></td>
-                  <td
-                    th:text="${#temporals.format(loan.loanedAt, 'yyyy/MM/dd')}"
-                  ></td>
-                  <td>
-                    <!-- 返却期限切れは赤字表示 -->
-                    <span
-                      th:classappend="${loan.dueDate.isBefore(#temporals.createToday())} ? 'text-danger fw-bold'"
-                      th:text="${#temporals.format(loan.dueDate, 'yyyy/MM/dd')}"
-                    >
-                    </span>
+          <tbody>
+            <tr th:each="loan : ${loans}">
+              <td th:text="${loan.book.title}"></td>
+              <td th:text="${loan.borrowerName}"></td>
+              <td th:text="${#temporals.format(loan.loanedAt, 'yyyy/MM/dd')}"></td>
+              <td>
+              <span
+                th:classappend="${loan.returnDate == null and loan.dueDate.isBefore(#temporals.createToday())} ? 'text-danger fw-bold'"
+                th:text="${#temporals.format(loan.dueDate, 'yyyy/MM/dd')}"
+                ></span>
                   </td>
                   <td class="text-center">
-                    <span
-                      th:if="${loan.dueDate.isBefore(#temporals.createToday())}"
-                      class="badge bg-danger"
-                      >期限切れ</span
-                    >
-                    <span
-                      th:unless="${loan.dueDate.isBefore(#temporals.createToday())}"
-                      class="badge bg-success"
-                      >貸出中</span
-                    >
+                    <!-- 返却済み -->
+                    <span th:if="${loan.returnDate != null}" class="badge bg-secondary">返却済み</span>
+                    <!-- 未返却・期限切れ -->
+                    <span th:if="${loan.returnDate == null and loan.dueDate.isBefore(#temporals.createToday())}" class="badge bg-danger">期限切れ</span>
+                    <!-- 未返却・貸出中 -->
+                    <span th:if="${loan.returnDate == null and !loan.dueDate.isBefore(#temporals.createToday())}" class="badge bg-success">貸出中</span>
                   </td>
                   <td class="text-center">
+                    <!-- 返却済みなら返却ボタンを隠す処理 -->
                     <form
+                      th:if="${loan.returnDate == null}"
                       th:action="@{/loans/{id}/return(id=${loan.id})}"
                       method="post"
                       class="d-inline"
                       onsubmit="return confirm('返却処理をしますか？');"
                     >
-                      <button
-                        type="submit"
-                        class="btn btn-sm btn-outline-primary"
-                      >
-                        返却
-                      </button>
+                    <button type="submit" class="btn btn-sm btn-outline-primary">返却</button>
                     </form>
+                    <span th:if="${loan.returnDate != null}" class="text-muted small">
+                    <span th:text="${#temporals.format(loan.returnDate, 'yyyy/MM/dd')}"></span> 返却済み
+                    </span>
                   </td>
                 </tr>
               </tbody>

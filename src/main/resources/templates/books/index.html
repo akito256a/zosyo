@@ -28,19 +28,33 @@
     </nav>
 
     <div class="container">
-      <!-- フラッシュメッセージ -->
-      <div
-        th:if="${successMessage}"
-        class="alert alert-success alert-dismissible fade show"
-        role="alert"
-      >
-        <span th:text="${successMessage}"></span>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
-      </div>
+    <!-- フラッシュメッセージ(成功の場合) -->
+    <div
+      th:if="${successMessage}"
+      class="alert alert-success alert-dismissible fade show"
+      role="alert"
+    >
+    <span th:text="${successMessage}"></span>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+    ></button>
+    </div>
+
+<!-- フラッシュメッセージ(失敗の場合) -->
+    <div
+      th:if="${errorMessage}"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+    <span th:text="${errorMessage}"></span>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+    ></button>
+    </div>
 
       <!-- 検索フォーム -->
       <div class="card mb-4">
