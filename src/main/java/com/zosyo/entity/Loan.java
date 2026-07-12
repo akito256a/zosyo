@@ -18,7 +18,7 @@ public class Loan {
     private Book book;
 
     @NotBlank(message = "貸出者名は必須です")
-    @Size(max = 20, message = "貸出者名は20文字以内で入力してください")
+    @Size(max = 30, message = "貸出者名は30文字以内で入力してください")
     @Column(name = "borrower_name", nullable = false, length = 100)
     private String borrowerName;
 
@@ -29,7 +29,6 @@ public class Loan {
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
 
-    // 返却日時。null = 貸出中、値あり = 返却済み。
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
@@ -38,7 +37,6 @@ public class Loan {
         loanedAt = LocalDateTime.now();
     }
 
-    // 返却済みかどうかを判定するヘルパー。
     public boolean isReturned() {
         return returnDate != null;
     }
@@ -58,7 +56,6 @@ public class Loan {
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
-    // 追加
     public LocalDateTime getReturnDate() { return returnDate; }
     public void setReturnDate(LocalDateTime returnDate) { this.returnDate = returnDate; }
 }

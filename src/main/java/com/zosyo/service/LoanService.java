@@ -36,13 +36,13 @@ public class LoanService {
         return loanRepository.findByBookIdOrderByLoanedAtDesc(bookId);
     }
 
-    // 貸出中のみ取得(API用です)
+    // 貸出中のみ取得：API用です
     @Transactional(readOnly = true)
     public List<Loan> findActiveLoans() {
         return loanRepository.findByReturnDateIsNullOrderByLoanedAtDesc();
     }
 
-    // 貸出処理：悲観ロックで在庫を取得してからチェックする
+    // 貸出処理：悲観ロックで在庫を取得してからチェック
     public void loanBook(Long bookId, Loan loan) {
         Book book = bookRepository.findByIdForUpdate(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("書籍が見つかりません。ID: " + bookId));
@@ -52,13 +52,12 @@ public class LoanService {
         }
 
         book.setStock(book.getStock() - 1);
-
         loan.setBook(book);
         loanRepository.save(loan);
     }
 
-    // 返却処理：returnDateを更新する
-    public void returnBook(Long loanId) {
+    // 返却処理：削除ではなくreturnDateを更新し、更新後のLoanを返す処理です
+    public Loan returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new ResourceNotFoundException("貸出記録が見つかりません。ID: " + loanId));
 
@@ -71,6 +70,6 @@ public class LoanService {
 
         book.setStock(book.getStock() + 1);
         loan.setReturnDate(LocalDateTime.now());
-        // 両方ともdirty checkingでUPDATEされる
+        return loan;
     }
 }

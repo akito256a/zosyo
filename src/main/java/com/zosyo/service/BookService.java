@@ -1,6 +1,7 @@
 package com.zosyo.service;
 
 import com.zosyo.entity.Book;
+import com.zosyo.exception.ResourceNotFoundException;
 import com.zosyo.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,13 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    // コンストラクタインジェクション
+    // コンストラクタインジェクション(DI)
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
     // ===========================
-    // 全件取得
+    // 全件取得します
     // ===========================
     @Transactional(readOnly = true)
     public List<Book> findAll() {
@@ -26,12 +27,12 @@ public class BookService {
     }
 
     // ===========================
-    // ID指定で1件取得
+    // ID指定で1件取得します
     // ===========================
     @Transactional(readOnly = true)
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("蔵書が見つかりません。ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("蔵書が見つかりません。ID: " + id));
     }
 
     // ===========================

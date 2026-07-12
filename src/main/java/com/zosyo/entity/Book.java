@@ -13,15 +13,15 @@ public class Book {
     private Long id;
 
     @NotBlank(message = "タイトルは必須です")
-    @Size(max = 100, message = "タイトルは100文字以内で入力してください")
+    @Size(max = 30, message = "タイトルは30文字以内で入力してください")
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Size(max = 100, message = "著者名は100文字以内で入力してください")
+    @Size(max = 30, message = "著者名は30文字以内で入力してください")
     @Column(name = "author", length = 100)
     private String author;
 
-    @Size(max = 50, message = "カテゴリは50文字以内で入力してください")
+    @Size(max = 30, message = "カテゴリは30文字以内で入力してください")
     @Column(name = "category", length = 50)
     private String category;
 
@@ -33,7 +33,7 @@ public class Book {
     @Column(name = "stock", nullable = false)
     private int stock = 1;
 
-    @Size(max = 100, message = "備考は100文字以内で入力してください")
+    @Size(max = 30, message = "備考は30文字以内で入力してください")
     @Column(name = "note", length = 100)
     private String note;
 
@@ -43,9 +43,6 @@ public class Book {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ===========================
-    // ライフサイクルコールバック
-    // ===========================
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -57,9 +54,6 @@ public class Book {
         updatedAt = LocalDateTime.now();
     }
 
-    // ===========================
-    // Getter / Setter
-    // ===========================
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
